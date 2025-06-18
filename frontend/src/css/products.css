@@ -1,0 +1,398 @@
+/* products.css - Полный CSS с исправлениями */
+
+:root {
+  --primary-color: #1A2238;
+  --secondary-color: #9E1946;
+  --accent-color: #F7B801;
+  --text-color: #1a1a1a;
+  --text-muted: #6b7280;
+  --bg-color: #ffffff;
+  --bg-gray: #f9fafb;
+  --border-color: #e5e7eb;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.15s ease-in-out;
+}
+
+/* Базовые стили */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-color);
+  background-color: var(--bg-gray);
+}
+
+/* Контейнеры */
+.products-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.high-rating-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Анимации */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Состояния загрузки */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(26, 34, 56, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s ease-in-out infinite;
+  margin: 2rem auto;
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+.error-message {
+  color: #dc2626;
+  background-color: #fef2f2;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  margin: 1rem 0;
+  text-align: center;
+}
+
+/* Карточки товаров - Общие стили */
+.product-card {
+  background: var(--bg-color);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  border: 1px solid var(--border-color);
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+}
+
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.product-card:hover::before {
+  opacity: 1;
+}
+
+/* Изображения товаров */
+.product-image-container {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.product-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: var(--transition);
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.image-placeholder-icon {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+/* Контент карточки */
+.product-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.product-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  min-height: calc(1.4em * 2);
+}
+
+.product-description {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  /* -webkit-line-clamp: 3; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  min-height: calc(1.5em * 3);
+  flex-grow: 1;
+}
+
+/* Цена и рейтинг */
+.product-price-rating {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.product-price {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--secondary-color);
+}
+
+.old-price {
+  font-size: 1rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+  margin-left: 0.5rem;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+}
+
+/* Кнопки */
+.product-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: var(--transition-fast);
+  margin-top: 1rem;
+  text-decoration: none;
+}
+
+.product-button:hover {
+  background-color: #111827;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Сетки товаров */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.high-rating-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* Галерея миниатюр */
+.thumbnail-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--bg-gray);
+  border-radius: var(--radius-lg);
+  margin-top: 1rem;
+}
+
+.thumbnail-button {
+  position: relative;
+  aspect-ratio: 1/1;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: var(--transition-fast);
+  background: var(--bg-color);
+  cursor: pointer;
+}
+
+.thumbnail-button:hover {
+  border-color: var(--primary-color);
+  transform: scale(1.05);
+}
+
+.thumbnail-button.active {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(26, 34, 56, 0.1);
+}
+
+.thumbnail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Стили для HighRatingProducts */
+.high-rating-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.high-rating-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.high-rating-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+  .products-grid, .high-rating-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  
+  .product-image-container {
+    height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .products-container, .high-rating-container {
+    padding: 1rem;
+  }
+  
+  .products-grid, .high-rating-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+  
+  .product-image-container {
+    height: 180px;
+  }
+  
+  .thumbnail-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .high-rating-title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .products-grid, .high-rating-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .product-image-container {
+    height: 220px;
+  }
+  
+  .thumbnail-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+  
+  .high-rating-header {
+    margin-bottom: 2rem;
+  }
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-color: #f8fafc;
+    --text-muted: #94a3b8;
+    --bg-color: #1e293b;
+    --bg-gray: #334155;
+    --border-color: #475569;
+  }
+  
+  .product-card {
+    background: var(--bg-color);
+    border-color: var(--border-color);
+  }
+  
+  .product-image-container {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+  }
+  
+  .thumbnail-grid {
+    background: #1e293b;
+  }
+}

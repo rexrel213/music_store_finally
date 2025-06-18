@@ -1,0 +1,56 @@
+services:
+  backend:
+    build: ./backend
+    container_name: fastapi-backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 80 --reload --log-level debug
+    ports:
+      - "5005:80"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:81194@db:5432/music_store
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    container_name: react-frontend
+    ports:
+      - "3005:80"
+    environment:
+      - VITE_API_URL=https://ruslik.taruman.ru
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:13
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: music_store
+      POSTGRES_PASSWORD: 81194
+    ports:
+      - "5555:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d music_store"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

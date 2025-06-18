@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^6.4.11",
+    "@tanstack/react-query": "^5.76.1",
+    "ra-data-json-server": "^5.7.4",
+    "ra-data-simple-rest": "^5.8.0",
+    "react-admin": "^5.8.0",
+    "react-toastify": "^11.0.5"
+  }
+}
