@@ -43,7 +43,7 @@ const Profile = () => {
 
   const fetchFavorites = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/favorites/`, {
+      const response = await fetch(`${BASE_URL}/favorites`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },

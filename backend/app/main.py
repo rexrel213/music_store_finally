@@ -22,7 +22,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "https://ruslik.taruman.ru",
-        "http://localhost:3000",
+        "https://musruslik.taruman.ru",
         "http://frontend:80",
         "http://backend:80",
     ],

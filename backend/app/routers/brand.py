@@ -12,7 +12,7 @@ from typing import List, Optional
 
 router = APIRouter(prefix="/brand", tags=["Brands"])
 
-@router.get("/", response_model=List[BrandRead])
+@router.get("", response_model=List[BrandRead])
 async def list_brands(db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Brand))
     brands = result.scalars().all()

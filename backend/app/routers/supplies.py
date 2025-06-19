@@ -11,7 +11,7 @@ from typing import List, Optional
 
 router = APIRouter(prefix="/supplies", tags=["Supplies"])
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("", status_code=status.HTTP_201_CREATED)
 async def create_supply(
     supply: SupplyCreate,
     db: AsyncSession = Depends(get_db),

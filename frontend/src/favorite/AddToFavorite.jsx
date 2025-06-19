@@ -57,7 +57,7 @@ const AddToFavoriteButton = ({ product }) => {
     setMessage('');
 
     try {
-      const response = await fetch(`${BASE_URL}/favorites/`, {
+      const response = await fetch(`${BASE_URL}/favorites`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

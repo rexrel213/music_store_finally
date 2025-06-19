@@ -40,7 +40,7 @@ const SupplyAddPage = () => {
     }
 
     try {
-      const res = await fetch('https://ruslik.taruman.ru/supplies/', {
+      const res = await fetch('https://ruslik.taruman.ru/supplies', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

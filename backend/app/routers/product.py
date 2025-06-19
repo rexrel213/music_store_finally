@@ -12,7 +12,7 @@ from typing import List, Optional
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
-@router.get("/", response_model=List[ProductReadWithRating])
+@router.get("", response_model=List[ProductReadWithRating])
 async def list_products(
     skip: int = 0,
     limit: int = 10,

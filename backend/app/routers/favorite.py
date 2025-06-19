@@ -9,7 +9,7 @@ from app.auth.dependencies import get_current_user
 
 router = APIRouter(prefix="/favorites", tags=["Favorites"])
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("", status_code=status.HTTP_201_CREATED)
 async def add_to_favorites(
     favorite_in: FavoriteCreate,
     db: AsyncSession = Depends(get_db),
@@ -39,7 +39,7 @@ async def add_to_favorites(
     return {"status": "success", "favorite_id": favorite.id}
 
 
-@router.get("/", response_model=list[FavoriteRead])
+@router.get("", response_model=list[FavoriteRead])
 async def get_favorites(
     db: AsyncSession = Depends(get_db),
     current_user = Depends(get_current_user)
