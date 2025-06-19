@@ -26,6 +26,7 @@ import CategoryPage from './pages/CategoryPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import UmamiDashboard from './context/Static.jsx'
+import SoldProduct from './pages/SoldProduct.jsx';
 
 // Конфигурация Umami
 const UMAMI_SCRIPT_URL = 'https://cloud.umami.is/script.js';
@@ -100,6 +101,7 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/static" element={<UmamiDashboard />} />
+          <Route path="/sold" element={<UmamiDashboard />} />
           <Route path="/products/:productId/commenttools/:commentId" element={<CommentItem />} />
           <Route path="/products/:productId/commenttools/:commentId/rating" element={<CommentRating />} />
           <Route path="/order" element={<Order />} />
