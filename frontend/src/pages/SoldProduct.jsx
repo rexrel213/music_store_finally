@@ -46,26 +46,19 @@ const SalesReport = () => {
           <tr>
             <th className="py-3 px-5 border-b border-gray-300 text-left">Название товара</th>
             <th className="py-3 px-5 border-b border-gray-300 text-center">Продано единиц</th>
-            <th className="py-3 px-5 border-b border-gray-300 text-center">Общая сумма</th>
           </tr>
         </thead>
         <tbody>
-          {report.items && report.items.length > 0 ? (
-            report.items.map((item) => (
-              <tr key={item.id} className="hover:bg-gray-50">
-                <td className="py-3 px-5 border-b border-gray-300">{item.name}</td>
-                <td className="py-3 px-5 border-b border-gray-300 text-center">{item.sold_count}</td>
-                <td className="py-3 px-5 border-b border-gray-300 text-center">
-                  {item.total_revenue.toLocaleString("ru-RU", {
-                    style: "currency",
-                    currency: "RUB",
-                  })}
-                </td>
+          {report.products && report.products.length > 0 ? (
+            report.products.map((product) => (
+              <tr key={product.id} className="hover:bg-gray-50">
+                <td className="py-3 px-5 border-b border-gray-300">{product.title}</td>
+                <td className="py-3 px-5 border-b border-gray-300 text-center">{product.sold_count}</td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="3" className="text-center py-6 text-gray-500">
+              <td colSpan="2" className="text-center py-6 text-gray-500">
                 Нет данных для отображения
               </td>
             </tr>
