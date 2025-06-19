@@ -7,7 +7,7 @@ def generate_order_barcode(order_id: int) -> str:
     code = str(order_id).zfill(12)
     if len(code) != 12 or not code.isdigit():
         raise ValueError("Order ID must be numeric and 12 digits long after zero-filling")
-    output_dir = 'https://ruslik.taruman.rustatic/barcodes/orders'
+    output_dir = 'https://ruslik.taruman.ru/static/barcodes/orders'
     os.makedirs(output_dir, exist_ok=True)
     EAN = barcode.get_barcode_class('ean13')
     ean = EAN(code, writer=ImageWriter())

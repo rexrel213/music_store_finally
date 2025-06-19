@@ -35,7 +35,7 @@ async def register_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
         await db.commit()
         await db.refresh(new_user)
 
-        access_token = create_access_token({"sub": new_user.email})
+        access_token = create_access_token({"sub": str(new_user.id)})
 
         return {
             "id": new_user.id,

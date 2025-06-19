@@ -23,7 +23,7 @@ async def create_supply(
     )
     supplier = result.scalar_one_or_none()
     if not supplier:
-        raise HTTPException(status_code=404, detail="Supplier not found")
+        raise HTTPException(status_code=404, detail="Supplier not found {current_user.id}")
 
     new_supply = Supply(supplier_id=supplier.id)
     db.add(new_supply)

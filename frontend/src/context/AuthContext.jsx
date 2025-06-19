@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
     // Сохраняем токен и пользователя
 
-    localStorage.setItem('token', data.access_token);
+    localStorage.setItem('user_id', data.id);
 
     // Получаем профиль пользователя сразу после регистрации
     const profileRes = await fetch('https://ruslik.taruman.ru/login/profile', {
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const data = await response.json();
-    localStorage.setItem('token', data.access_token);
+    localStorage.setItem('user_id', profileData.id);
 
     // Получаем профиль пользователя сразу после логина
     const profileRes = await fetch('https://ruslik.taruman.ru/login/profile', {

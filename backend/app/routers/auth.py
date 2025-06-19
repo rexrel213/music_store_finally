@@ -45,7 +45,7 @@ async def login(
         "id": user.id,
         "email": user.email,
         "name": user.name,
-        "avatar": f"/login/profile/avatar/{user.id}",
+        "avatar": f"https://ruslik.taruman.ru/login/profile/avatar/{user.id}",
         "role_id": user.role_id,
         "created_at": user.created_at
     }
