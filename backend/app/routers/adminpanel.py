@@ -289,41 +289,21 @@ async def create_category(category: CategoryCreate, db: AsyncSession = Depends(g
 
 
 @router.get("/categories/{id}/products")
-async def get_products_by_category(
-    id: int,
-    price_min: Optional[float] = None,
-    price_max: Optional[float] = None,
-    brand_id: Optional[int] = None,
-    db: AsyncSession = Depends(get_db)
-):
-    # Получаем категорию
-    category_result = await db.execute(select(Category).where(Category.id == id))
-    category = category_result.scalars().first()
-    if not category:
-        raise HTTPException(status_code=404, detail="Category not found")
-
-    # Получаем типы музыки для категории
+async def get_products_by_category(id: int, db: AsyncSession = Depends(get_db)):
+    # Получаем все типы музыки для категории
     music_types_result = await db.execute(
         select(MusicType.id).where(MusicType.category_id == id)
     )
     music_type_ids = [row[0] for row in music_types_result.all()]
     if not music_type_ids:
-        return {"category": category, "products": []}
+        return {"products": []}
 
-    # Формируем запрос на продукты с фильтрами
-    query = select(Product).where(Product.music_type_id.in_(music_type_ids))
-
-    if price_min is not None:
-        query = query.where(Product.price >= price_min)
-    if price_max is not None:
-        query = query.where(Product.price <= price_max)
-    if brand_id is not None:
-        query = query.where(Product.brand_id == brand_id)
-
-    products_result = await db.execute(query)
+    # Получаем все товары с этими типами музыки
+    products_result = await db.execute(
+        select(Product).where(Product.music_type_id.in_(music_type_ids))
+    )
     products = products_result.scalars().all()
-
-    return {"category": category, "products": products}
+    return {"products": products}
 
 # ======================== Музыкальные типы ========================
 @router.get("/music-types", response_model=MusicTypeListResponse)
