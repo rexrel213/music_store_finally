@@ -27,7 +27,7 @@ const ReplyForm = ({ commentId, productId, onSuccess }) => {
     setSubmitting(true);
 
     try {
-      const replyRes = await fetch(`${BASE_URL}/products/${productId}/comments`, {
+      const replyRes = await fetch(`${BASE_URL}/products/${productId}/comments/reply`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
