@@ -190,6 +190,17 @@ class ProductReadWithRating(ProductRead):
     }
 
 
+# ---------------------------
+
+class CategoryProductsResponse(BaseModel):
+    category: CategoryRead
+    products: list[ProductRead]
+
+    model_config = {
+        "from_attributes": True
+    }
+
+
 # --- Комментарии ---
 
 class CommentCreate(BaseModel):

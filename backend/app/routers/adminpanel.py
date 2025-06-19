@@ -3,7 +3,7 @@ from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from sqlalchemy.orm import selectinload
-from typing import List
+from typing import List, Optional
 from uuid import uuid4
 import shutil
 from pathlib import Path
@@ -22,7 +22,7 @@ from app.schemas import (
     OrderRead, OrderListResponse,
     RatingCreate, RatingRead,
     SupplyCreate, SupplyRead, SupplyListResponse, SupplyItemRead, SupplyItemCreate,   
-    OrderItemRead, OrderItemCreate
+    OrderItemRead, OrderItemCreate, CategoryProductsResponse
 )
 
 router = APIRouter(
@@ -288,22 +288,40 @@ async def create_category(category: CategoryCreate, db: AsyncSession = Depends(g
     return db_category
 
 
-@router.get("/categories/{id}/products")
-async def get_products_by_category(id: int, db: AsyncSession = Depends(get_db)):
-    # Получаем все типы музыки для категории
+@router.get("/categories/{id}/products", response_model=CategoryProductsResponse)
+async def get_products_by_category(
+    id: int,
+    price_min: Optional[float] = None,
+    price_max: Optional[float] = None,
+    brand_id: Optional[int] = None,
+    db: AsyncSession = Depends(get_db)
+):
+    category_result = await db.execute(select(Category).where(Category.id == id))
+    category = category_result.scalars().first()
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+
     music_types_result = await db.execute(
         select(MusicType.id).where(MusicType.category_id == id)
     )
     music_type_ids = [row[0] for row in music_types_result.all()]
-    if not music_type_ids:
-        return {"products": []}
 
-    # Получаем все товары с этими типами музыки
-    products_result = await db.execute(
-        select(Product).where(Product.music_type_id.in_(music_type_ids))
-    )
+    if not music_type_ids:
+        return CategoryProductsResponse(category=category, products=[])
+
+    query = select(Product).where(Product.music_type_id.in_(music_type_ids))
+
+    if price_min is not None:
+        query = query.where(Product.price >= price_min)
+    if price_max is not None:
+        query = query.where(Product.price <= price_max)
+    if brand_id is not None:
+        query = query.where(Product.brand_id == brand_id)
+
+    products_result = await db.execute(query)
     products = products_result.scalars().all()
-    return {"products": products}
+
+    return CategoryProductsResponse(category=category, products=products)
 
 # ======================== Музыкальные типы ========================
 @router.get("/music-types", response_model=MusicTypeListResponse)

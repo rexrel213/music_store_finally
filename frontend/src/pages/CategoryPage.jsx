@@ -32,37 +32,49 @@ const CategoryPage = () => {
   // Загрузка категории и продуктов с учётом фильтров
   useEffect(() => {
     if (!categoryId) return;
-
+  
     const fetchData = async () => {
       setLoading(true);
       setError(null);
       
       try {
-        // Загружаем информацию о категории
-        const categoryRes = await fetch(`${BASE_URL}/admin/categories/${categoryId}`);
-        if (!categoryRes.ok) throw new Error('Ошибка загрузки категории');
-        const categoryData = await categoryRes.json();
-        setCategory(categoryData);
-
-        // Загружаем продукты с фильтрами
+        // Параметры для продуктов
         const params = new URLSearchParams();
-        params.append('category_id', categoryId);
-        
         if (priceRange.min) params.append('price_min', priceRange.min);
         if (priceRange.max) params.append('price_max', priceRange.max);
         if (brand) params.append('brand_id', brand);
-
-        const productsRes = await fetch(`${BASE_URL}/products?${params.toString()}`);
-        if (!productsRes.ok) throw new Error('Ошибка загрузки товаров');
-        const productsData = await productsRes.json();
-        setProducts(productsData.data || productsData);
+  
+        // Делаем один запрос, который вернет и категорию и продукты
+        const res = await fetch(`${BASE_URL}/admin/categories/${categoryId}/products?${params.toString()}`);
+        
+        if (!res.ok) {
+          // Проверяем статус ошибки
+          if (res.status === 404) {
+            throw new Error('Категория не найдена');
+          }
+          throw new Error(`Ошибка сервера: ${res.status}`);
+        }
+        
+        const data = await res.json();
+        
+        // ВАЖНО: Ваш бэкенд возвращает {products: [...]}
+        // Нет информации о категории в ответе!
+        setProducts(data.products || []);
+        
+        // Поскольку у нас нет информации о категории,
+        // мы можем установить заглушку
+        setCategory({
+          name: `Категория ${categoryId}`,
+          description: "Описание категории отсутствует"
+        });
+  
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, [categoryId, priceRange, brand]);
 
