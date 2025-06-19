@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      fetch('https://ruslik.taruman.ru/profile', {
+      fetch('https://ruslik.taruman.ru/login/profile', {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then(res => {
@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
           localStorage.removeItem('user');
           setCurrentUser(null);
           setLoading(false);
+          navigate('/login')
         });
     } else {
       setLoading(false);
@@ -98,32 +99,6 @@ export const AuthProvider = ({ children }) => {
     return profileData;
   };
 
-  // Получение профиля при старте приложения
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetch('https://ruslik.taruman.ru/login/profile', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to fetch user');
-          return res.json();
-        })
-        .then(data => {
-          setCurrentUser(data);
-          localStorage.setItem('user', JSON.stringify(data));
-          setLoading(false);
-        })
-        .catch(() => {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          setCurrentUser(null);
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
-    }
-  }, []);
 
   // Обновление профиля (например, имя, email, аватар)
   const updateUser = async (userData) => {

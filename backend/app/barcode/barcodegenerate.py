@@ -7,7 +7,7 @@ def generate_order_barcode(order_id: int) -> str:
     code = str(order_id).zfill(12)
     if len(code) != 12 or not code.isdigit():
         raise ValueError("Order ID must be numeric and 12 digits long after zero-filling")
-    output_dir = 'https://ruslik.taruman.ru/static/barcodes/orders'
+    output_dir = os.path.join(os.getcwd(), 'static', 'barcodes', 'orders')
     os.makedirs(output_dir, exist_ok=True)
     EAN = barcode.get_barcode_class('ean13')
     ean = EAN(code, writer=ImageWriter())
@@ -15,11 +15,11 @@ def generate_order_barcode(order_id: int) -> str:
     try:
         fullname = ean.save(filename)
     except Exception as e:
-        # Логируем ошибку и пробрасываем дальше
         print(f"Ошибка генерации штрих-кода: {e}")
         raise
-    relative_path = fullname.replace('\\', '/')
-    return relative_path
+    # Относительный путь для фронта
+    rel_path = f'/static/barcodes/order_{order_id}.png'
+    return rel_path
 
 
 # Пример использования в асинхронной функции (например, при создании заказа)
