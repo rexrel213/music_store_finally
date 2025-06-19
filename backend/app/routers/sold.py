@@ -1,21 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.dependencies import get_db, get_current_user
-from app.models import Order, OrderItem, Product, OrderStatusEnum, User
+from sqlalchemy.future import select
+from sqlalchemy import func
+from models import Product, OrderItem, Order, OrderStatusEnum, User
+from dependencies import get_db, get_current_user
 
-router = APIRouter(prefix="/sold", tags=["Sold"])
+router = APIRouter()
 
 @router.get("/total")
 async def get_sales_report(
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    # Проверка роли пользователя — допустим, роль admin имеет id=1 (замените на вашу логику)
+    # Проверка роли пользователя — допустим, роль admin имеет id=1
     if current_user.role_id != 1:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Доступ запрещён")
 
-    # Основной запрос: суммируем количество проданных товаров по всем COMPLETED заказам
+    # Запрос: суммируем количество проданных товаров по всем COMPLETED заказам
     result = await db.execute(
         select(
             Product.id,

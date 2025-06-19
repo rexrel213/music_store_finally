@@ -5,29 +5,56 @@ const BASE_URL = 'https://ruslik.taruman.ru';
 const SalesReport = () => {
   const [report, setReport] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchReport = () => {
     const token = localStorage.getItem("token");
-    fetch(`${BASE_URL}/sold/total`, {
+    if (!token) {
+      setError("Пользователь не авторизован");
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    fetch(`${BASE_URL}/total`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(async (res) => {
-        if (!res.ok) throw new Error("Ошибка загрузки отчёта");
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(errorText || "Ошибка загрузки отчёта");
+        }
         return res.json();
       })
       .then((data) => {
-        console.log("Sales report data:", data);
         setReport(data);
       })
-      .catch((err) => setError(err.message));
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchReport();
   }, []);
 
-  if (error) {
-    return <div className="text-red-600 text-center mt-4">{error}</div>;
+  if (loading) {
+    return <div className="text-center mt-4">Загрузка...</div>;
   }
 
-  if (!report) {
-    return <div className="text-center mt-4">Загрузка...</div>;
+  if (error) {
+    return (
+      <div className="text-red-600 text-center mt-4">
+        {error}
+        <button
+          onClick={fetchReport}
+          className="ml-4 px-3 py-1 bg-blue-500 text-white rounded"
+        >
+          Повторить
+        </button>
+      </div>
+    );
   }
 
   return (
