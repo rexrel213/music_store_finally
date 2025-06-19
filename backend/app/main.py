@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from app.routers import register, auth, adminpanel, product, order, favorite, brand, supplies
+from app.routers import register, auth, adminpanel, product, order, favorite, brand, supplies, sold
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import logging
@@ -51,6 +51,7 @@ app.include_router(order.router)
 app.include_router(favorite.router) 
 app.include_router(brand.router) 
 app.include_router(supplies.router) 
+app.include_router(sold.router)
 
 @app.get("/")
 async def root():
