@@ -45,7 +45,7 @@ const CategoryPage = () => {
         if (brand) params.append('brand_id', brand);
   
         // Загружаем категорию отдельно
-        const categoryRes = await fetch(`${BASE_URL}/categories/${categoryId}`);
+        const categoryRes = await fetch(`${BASE_URL}/admin/categories/${categoryId}`);
         if (!categoryRes.ok) throw new Error('Категория не найдена');
         const categoryData = await categoryRes.json();
         setCategory(categoryData);
