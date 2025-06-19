@@ -23,6 +23,7 @@ services:
       - VITE_API_URL=https://ruslik.taruman.ru
     depends_on:
       - backend
+    restart: always
 
   db:
     image: postgres:13
@@ -40,6 +41,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    restart: always
 
   pgadmin:
     image: dpage/pgadmin4
@@ -52,6 +54,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    restart: always
 
 volumes:
   pgdata:
