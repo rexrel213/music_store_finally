@@ -7,6 +7,9 @@ import AddToFavorite from '../favorite/AddToFavorite';
 import CommentForm from './comm/CommentForm';
 import CommentItem from './comm/CommentItem';
 
+const MAX_DEPTH = 3;       
+const MAX_CHILDREN = 3;  
+
 const ProductDetails = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -48,19 +51,42 @@ const ProductDetails = () => {
   }, [productId]);
 
   // Построение дерева комментариев
-  const buildCommentTree = (comments) => {
+  const buildCommentTree = (comments, maxDepth = MAX_DEPTH) => {
     const map = {};
     const roots = [];
-    comments.forEach(c => { map[c.id] = { ...c, children: [] }; });
+
     comments.forEach(c => {
-      if (c.parent_id) {
-        if (map[c.parent_id]) map[c.parent_id].children.push(map[c.id]);
-        else roots.push(map[c.id]);
+      map[c.id] = { ...c, children: [] };
+    });
+
+    comments.forEach(c => {
+      if (c.parent_id && map[c.parent_id]) {
+        map[c.parent_id].children.push(map[c.id]);
       } else {
         roots.push(map[c.id]);
       }
     });
-    return roots;
+
+    // Обрезаем дерево по глубине и количеству детей
+    const trimTree = (nodes, depth = 1) => {
+      if (depth > maxDepth) {
+        // На максимальной глубине не показываем детей
+        return nodes.map(node => ({ ...node, children: [] }));
+      }
+      return nodes.map(node => {
+        let trimmedChildren = node.children || [];
+        if (trimmedChildren.length > MAX_CHILDREN) {
+          trimmedChildren = trimmedChildren.slice(0, MAX_CHILDREN);
+          node.hasMoreChildren = true; // Флаг для UI, чтобы показать кнопку "Показать ещё"
+        }
+        return {
+          ...node,
+          children: trimTree(trimmedChildren, depth + 1),
+        };
+      });
+    };
+
+    return trimTree(roots);
   };
 
   if (loading) {

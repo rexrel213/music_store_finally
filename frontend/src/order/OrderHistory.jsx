@@ -173,7 +173,7 @@ const OrderHistory = () => {
             {order?.barcode && (
               <div className="flex justify-center items-center bg-gray-50 py-6">
                 <img 
-                  src={`${BASE_URL}${order.barcode}`} 
+                  src={`${BASE_URL}/static/barcodes/order_${order.id}.png`} 
                   alt={`Штрихкод заказа #${order.id}`} 
                   className="w-40 h-40 object-contain"
                 />

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 
 const ProductAddPage = () => {
+  const {currentUser} = useAuth();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -107,6 +109,15 @@ const ProductAddPage = () => {
       alert(err.message);
     }
   };
+
+  if (!currentUseruser || currentUser.role_id !== 1) {
+    return (
+      <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-2xl shadow-md border border-gray-200 text-center">
+        <h2 className="text-xl font-semibold mb-4">Доступ запрещён</h2>
+        <p>У вас нет прав для добавления нового товара.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-2xl shadow-md border border-gray-200">
