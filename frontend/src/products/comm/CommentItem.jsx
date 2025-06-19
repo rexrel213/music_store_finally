@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Clock, Edit, MessageSquare } from 'lucide-react';
-import ReplyForm from './ReplyForm'; // предполагается, что есть компонент формы ответа
-import CommentRating from './CommentRatingForm'; // компонент рейтинга комментария
-import Avatar from '../../context/Avatar'; // компонент аватара пользователя
+import ReplyForm from './ReplyForm';
+import CommentRating from './CommentRatingForm';
+import Avatar from '../../context/Avatar';
 import { useAuth } from '../../context/AuthContext';
 
 const BASE_URL = 'https://ruslik.taruman.ru';
@@ -13,6 +13,7 @@ const CommentItem = ({ comment, onReplySuccess, level = 0 }) => {
   const [editContent, setEditContent] = useState(comment.content);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showAllChildren, setShowAllChildren] = useState(false);
   const { currentUser } = useAuth();
 
   const handleSave = async () => {
@@ -25,11 +26,11 @@ const CommentItem = ({ comment, onReplySuccess, level = 0 }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
-              body: JSON.stringify({
-        content: editContent,
-        user_id: comment.user_id,
-        product_id: comment.product_id,
-      }),
+        body: JSON.stringify({
+          content: editContent,
+          user_id: comment.user_id,
+          product_id: comment.product_id,
+        }),
       });
       if (!res.ok) {
         const errData = await res.json();
@@ -43,7 +44,9 @@ const CommentItem = ({ comment, onReplySuccess, level = 0 }) => {
       setLoading(false);
     }
   };
-  
+
+  // Выбираем, какие дочерние комментарии показывать: все или только часть
+  const childrenToShow = showAllChildren ? (comment.childrenFull || comment.children) : comment.children;
 
   return (
     <div className={`${level > 0 ? 'ml-8 pl-6 border-l-2 border-gray-200' : ''} bg-white border border-gray-200 rounded-lg p-6 shadow-sm`}>
@@ -148,9 +151,10 @@ const CommentItem = ({ comment, onReplySuccess, level = 0 }) => {
             </div>
           )}
 
-          {comment.children && comment.children.length > 0 && (
+          {/* Дочерние комментарии */}
+          {childrenToShow && childrenToShow.length > 0 && (
             <div className="mt-6 space-y-4">
-              {comment.children.map(child => (
+              {childrenToShow.map(child => (
                 <CommentItem
                   key={child.id}
                   comment={child}
@@ -159,6 +163,16 @@ const CommentItem = ({ comment, onReplySuccess, level = 0 }) => {
                 />
               ))}
             </div>
+          )}
+
+          {/* Кнопка "Показать ещё ответы" */}
+          {comment.hasMoreChildren && !showAllChildren && (
+            <button
+              onClick={() => setShowAllChildren(true)}
+              className="mt-2 text-blue-600 hover:underline text-sm"
+            >
+              Показать ещё ответы
+            </button>
           )}
         </div>
       </div>
