@@ -56,6 +56,8 @@ const Header = () => {
   const adminLinks = [];
   if (currentUser?.role_id === 1) {
     adminLinks.push({ path: "/products/create", label: "Админ-панель" });
+    adminLinks.push({ path: "/static", label: "Статистика" });
+    adminLinks.push({ path: "/total", label: "Продажи" });
   }
   if (currentUser?.role_id === 4) {
     adminLinks.push({ path: "/supplies/create", label: "Добавить поставку" });

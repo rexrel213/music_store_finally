@@ -12,6 +12,7 @@ services:
         condition: service_healthy
     volumes:
       - ./backend:/app
+    restart: always
 
   frontend:
     build: ./frontend
