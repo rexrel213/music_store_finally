@@ -309,7 +309,11 @@ async def get_products_by_category(
     if not music_type_ids:
         return CategoryProductsResponse(category=category, products=[])
 
-    query = select(Product).where(Product.music_type_id.in_(music_type_ids))
+    query = select(Product).options(
+        selectinload(Product.brand),
+        selectinload(Product.music_type),
+        selectinload(Product.images)
+    ).where(Product.music_type_id.in_(music_type_ids))
 
     if price_min is not None:
         query = query.where(Product.price >= price_min)
