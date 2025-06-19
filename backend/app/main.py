@@ -42,7 +42,7 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 # --------------------------------------------
 
-
+app.include_router(sold.router)
 app.include_router(register.router)
 app.include_router(auth.router) 
 app.include_router(adminpanel.router) 
@@ -51,7 +51,7 @@ app.include_router(order.router)
 app.include_router(favorite.router) 
 app.include_router(brand.router) 
 app.include_router(supplies.router) 
-app.include_router(sold.router)
+
 
 @app.get("/")
 async def root():
