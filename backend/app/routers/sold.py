@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import func
-from models import Product, OrderItem, Order, OrderStatusEnum, User
-from dependencies import get_db, get_current_user
+from app.models import Product, OrderItem, Order, OrderStatusEnum, User
+from app.auth.dependencies import get_current_user
+from app.database import get_db
 
 router = APIRouter()
 
