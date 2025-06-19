@@ -146,7 +146,6 @@ const ProfileEditForm = ({ currentUser, onSuccess, onError }) => {
               onChange={handlePasswordChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#1A2238] focus:border-[#1A2238]"
               placeholder="Введите текущий пароль"
-              readOnly
             />
           </div>
 
