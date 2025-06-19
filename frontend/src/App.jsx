@@ -101,7 +101,7 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/static" element={<UmamiDashboard />} />
-          <Route path="/sold" element={<UmamiDashboard />} />
+          <Route path="/sold" element={<SoldProduct />} />
           <Route path="/products/:productId/commenttools/:commentId" element={<CommentItem />} />
           <Route path="/products/:productId/commenttools/:commentId/rating" element={<CommentRating />} />
           <Route path="/order" element={<Order />} />
