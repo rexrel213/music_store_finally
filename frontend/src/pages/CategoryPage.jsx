@@ -39,7 +39,7 @@ const CategoryPage = () => {
       
       try {
         // Загружаем информацию о категории
-        const categoryRes = await fetch(`${BASE_URL}/admin/categories/${categoryId}`);
+        const categoryRes = await fetch(`${BASE_URL}/admin/categories/${categoryId}/products`);
         if (!categoryRes.ok) throw new Error('Ошибка загрузки категории');
         const categoryData = await categoryRes.json();
         setCategory(categoryData);
