@@ -44,29 +44,17 @@ const CategoryPage = () => {
         if (priceRange.max) params.append('price_max', priceRange.max);
         if (brand) params.append('brand_id', brand);
   
-        // Делаем один запрос, который вернет и категорию и продукты
-        const res = await fetch(`${BASE_URL}/admin/categories/${categoryId}/products?${params.toString()}`);
-        
-        if (!res.ok) {
-          // Проверяем статус ошибки
-          if (res.status === 404) {
-            throw new Error('Категория не найдена');
-          }
-          throw new Error(`Ошибка сервера: ${res.status}`);
-        }
-        
-        const data = await res.json();
-        
-        // ВАЖНО: Ваш бэкенд возвращает {products: [...]}
-        // Нет информации о категории в ответе!
-        setProducts(data.products || []);
-        
-        // Поскольку у нас нет информации о категории,
-        // мы можем установить заглушку
-        setCategory({
-          name: `Категория ${categoryId}`,
-          description: "Описание категории отсутствует"
-        });
+        // Загружаем категорию отдельно
+        const categoryRes = await fetch(`${BASE_URL}/categories/${categoryId}`);
+        if (!categoryRes.ok) throw new Error('Категория не найдена');
+        const categoryData = await categoryRes.json();
+        setCategory(categoryData);
+  
+        // Загружаем продукты
+        const productsRes = await fetch(`${BASE_URL}/admin/categories/${categoryId}/products?${params.toString()}`);
+        if (!productsRes.ok) throw new Error(`Ошибка сервера: ${productsRes.status}`);
+        const productsData = await productsRes.json();
+        setProducts(productsData.products || []);
   
       } catch (err) {
         setError(err.message);
@@ -150,21 +138,6 @@ const CategoryPage = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Category Description */}
-        {category?.description && (
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 mb-8">
-            <div className="flex items-start space-x-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#1A2238] to-[#9E1946] rounded-xl flex items-center justify-center flex-shrink-0">
-                <Music className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-[#1A2238] mb-3">О категории</h2>
-                <p className="text-gray-600 leading-relaxed text-lg">{category.description}</p>
-              </div>
-            </div>
-          </div>
-        )}
-
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <div className="lg:w-80 flex-shrink-0">
