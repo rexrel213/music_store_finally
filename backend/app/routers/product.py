@@ -15,7 +15,7 @@ router = APIRouter(prefix="/products", tags=["Products"])
 @router.get("", response_model=List[ProductReadWithRating])
 async def list_products(
     skip: int = 0,
-    limit: int = 10,
+    limit: int = 30,
     q: Optional[str] = Query(None, description="Поисковый запрос по названию"),
     price_min: Optional[float] = Query(None, description="Минимальная цена"),
     price_max: Optional[float] = Query(None, description="Максимальная цена"),

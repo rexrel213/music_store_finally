@@ -40,6 +40,7 @@ const CategoryPage = () => {
       try {
         // Параметры для продуктов
         const params = new URLSearchParams();
+
         if (priceRange.min) params.append('price_min', priceRange.min);
         if (priceRange.max) params.append('price_max', priceRange.max);
         if (brand) params.append('brand_id', brand);
@@ -363,10 +364,6 @@ const CategoryPage = () => {
                           {product.description ? product.description.slice(0, 120) + '...' : 'Описание недоступно'}
                         </p>
                         
-                        {/* Rating */}
-                        <div className="mb-4">
-                          <StarRating rating={product.avg_rating || 0} />
-                        </div>
                         
                         {/* Price and Button - Fixed at bottom */}
                         <div className="mt-auto">

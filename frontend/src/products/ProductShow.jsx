@@ -245,7 +245,7 @@ const ProductDetails = () => {
               </div>
               {/* Описание */}
               <div className="prose max-w-none">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Описание</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Характеристики</h3>
                 <div className="text-gray-600 leading-relaxed space-y-3">
                   {product.description ? (
                     product.description.split('\n').map((paragraph, index) => (

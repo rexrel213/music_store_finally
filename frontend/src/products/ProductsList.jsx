@@ -40,12 +40,13 @@ const ProductsList = () => {
 
     const params = new URLSearchParams();
 
+
     if (priceRange.min) params.append('price_min', priceRange.min);
     if (priceRange.max) params.append('price_max', priceRange.max);
     if (brand) params.append('brand_id', brand);
     if (musicType) params.append('music_type_id', musicType);
 
-    fetch(`${BASE_URL}/products?${params.toString()}`)
+    fetch(`${BASE_URL}/products?limit=30&${params.toString()}`)
       .then(res => {
         if (!res.ok) throw new Error('Ошибка загрузки данных');
         return res.json();
